@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio de JG Estudio3D - Renderizado Interactivo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Iconos (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Estilo personalizado para usar la fuente Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Gris oscuro para el fondo */
+            color: #E5E7EB; /* Color de texto claro */
+        }
+        
+        /* --- ESTILOS PARA EL FONDO DEL HÉROE --- */
+        .hero-background {
+            /* Imagen de fondo actualizada con tu render */
+            background-image: url('https://i.postimg.cc/nrJc1R8F/casa-port-ps-02.jpg');
+            background-size: cover;
+            background-position: center center;
+            position: relative;
+        }
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(17, 24, 39, 0.6); /* Color de fondo oscuro con 60% de opacidad */
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .text-shadow {
+            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        /* --- ESTILOS PARA EL FONDO DE "SOBRE NOSOTROS" --- */
+        .about-background {
+            background-image: url('https://i.postimg.cc/28dpTwP6/sala-comedor-port-ps.jpg');
+            background-size: cover;
+            background-position: center center;
+            position: relative;
+        }
+        .about-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(17, 24, 39, 0.65); /* Opacidad del overlay reducida al 65% */
+            z-index: 1;
+            border-radius: 0.5rem; /* Coincide con el borde redondeado de la sección */
+        }
+        .about-content {
+            position: relative;
+            z-index: 2;
+        }
+
+
+        .portfolio-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .portfolio-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        .modal-content {
+            transition: transform 0.25s ease;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .portfolio-card:hover .video-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Contenedor Principal -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Barra de Navegación -->
+        <header class="flex justify-between items-center py-6 sticky top-0 bg-gray-900/80 backdrop-blur-sm z-50 -mx-4 px-4">
+            <div class="text-2xl font-bold tracking-tighter">
+                <a href="#" class="hover:text-cyan-400 transition-colors">JG Estudio3D</a>
+            </div>
+            <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#galeria" class="hover:text-cyan-400 transition-colors">Galería</a>
+                <a href="#videos" class="hover:text-cyan-400 transition-colors">Videos</a>
+                <a href="#sobre-mi" class="hover:text-cyan-400 transition-colors">Sobre nosotros</a>
+                <a href="#contacto" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Contacto</a>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-300 hover:text-white">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú Móvil (Oculto por defecto) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 rounded-lg p-4 mt-2">
+            <a href="#galeria" class="block py-2 px-4 text-sm hover:bg-gray-700 rounded">Galería</a>
+            <a href="#videos" class="block py-2 px-4 text-sm hover:bg-gray-700 rounded">Videos</a>
+            <a href="#sobre-mi" class="block py-2 px-4 text-sm hover:bg-gray-700 rounded">Sobre nosotros</a>
+            <a href="#contacto" class="block mt-2 text-center bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">Contacto</a>
+        </div>
+
+
+        <!-- Sección Héroe -->
+        <main>
+            <section class="text-center py-20 lg:py-32 hero-background rounded-lg mt-8 fade-in">
+                <div class="hero-content">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4 text-white text-shadow">
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">Renderizado Interactivo</span> que Cautiva
+                    </h1>
+                    <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-200 mb-8 text-shadow">
+                        En JG Estudio3D, nos especializamos en crear experiencias visuales inmersivas y en tiempo real para arquitectura,empresas de construccion e inmobiliarias.
+                    </p>
+                    <a href="#galeria" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-transform transform hover:scale-105 inline-block">
+                        Ver nuestros trabajos
+                    </a>
+                </div>
+            </section>
+
+            <!-- Sección de Galería de Imágenes -->
+            <section id="galeria" class="py-20 lg:py-28">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 tracking-tight">Galería de Imágenes</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Tarjeta de Imagen 1 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in" data-type="image" data-source="https://i.postimg.cc/tTLv0SC0/Escena-1-9-ps.png">
+                        <img src="https://i.postimg.cc/tTLv0SC0/Escena-1-9-ps.png" alt="Render Sala de Baño" class="w-full h-48 object-cover">
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Sala De Baño</h3><p class="text-gray-400 text-sm">Baño De Penthouse.</p></div>
+                    </div>
+                    <!-- Tarjeta de Imagen 2 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in" data-type="image" data-source="https://i.postimg.cc/TwwYNL1S/casa-port-ps-01.jpg">
+                        <img src="https://i.postimg.cc/TwwYNL1S/casa-port-ps-01.jpg" alt="Render de fachada de casa" class="w-full h-48 object-cover">
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Fachada Iluminada</h3><p class="text-gray-400 text-sm">Diseño de exterior con iluminación nocturna.</p></div>
+                    </div>
+                    <!-- Tarjeta de Imagen 3 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in" data-type="image" data-source="https://i.postimg.cc/7PtYzStv/Escena-3ps01.png">
+                        <img src="https://i.postimg.cc/7PtYzStv/Escena-3ps01.png" alt="Render de Sala de estar" class="w-full h-48 object-cover">
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Sala Estilo Contemporáneo</h3><p class="text-gray-400 text-sm">Diseño de interiores .</p></div>
+                    </div>
+                    <!-- Tarjeta de Imagen 4 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in" data-type="image" data-source="https://i.postimg.cc/mZwQ2QqP/Whats-App-Image-2026-01-13-at-10-53-36-AM.jpg">
+                        <img src="https://i.postimg.cc/mZwQ2QqP/Whats-App-Image-2026-01-13-at-10-53-36-AM.jpg" alt="Render de sala de estar" class="w-full h-48 object-cover">
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Sala de Estar</h3><p class="text-gray-400 text-sm">Visualización de espacio interior con luz natural.</p></div>
+                    </div>
+                    <!-- Tarjeta de Imagen 5 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in" data-type="image" data-source="https://i.postimg.cc/8zm6qvkP/comedor-03-port-ps.jpg">
+                        <img src="https://i.postimg.cc/8zm6qvkP/comedor-03-port-ps.jpg" alt="Render de comedor con cocina integrada" class="w-full h-48 object-cover">
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Espacio Abierto</h3><p class="text-gray-400 text-sm">Concepto de comedor y cocina integrados.</p></div>
+                    </div>
+                    <!-- Tarjeta de Imagen 6 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in" data-type="image" data-source="https://i.postimg.cc/GpMsp1sW/supermercado-port-ps.jpg">
+                        <img src="https://i.postimg.cc/GpMsp1sW/supermercado-port-ps.jpg" alt="Render de interior de supermercado" class="w-full h-48 object-cover">
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Proyecto Comercial</h3><p class="text-gray-400 text-sm">Visualización de interior para supermercado.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Videos Cortos -->
+            <section id="videos" class="py-20 lg:py-28 bg-gray-900/50 rounded-lg">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 tracking-tight">Videos Cortos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Tarjeta de Video 1 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in relative" data-type="video" data-source="https://player.vimeo.com/video/1103239639">
+                        <img src="https://i.postimg.cc/cHyGwvYw/image.png" alt="Video de recorrido de Apartamento" class="w-full h-48 object-cover">
+                        <div class="video-overlay"><i data-lucide="play-circle" class="w-16 h-16 text-white"></i></div>
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Apartamento</h3><p class="text-gray-400 text-sm">Recorrido virtual de un moderno apartamento.</p></div>
+                    </div>
+                    <!-- Tarjeta de Video 2 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in relative" data-type="video" data-source="https://player.vimeo.com/video/1103491220">
+                        <img src="https://i.postimg.cc/d07J8MfP/image.png" alt="Video de Concepto Abierto" class="w-full h-48 object-cover">
+                        <div class="video-overlay"><i data-lucide="play-circle" class="w-16 h-16 text-white"></i></div>
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Concepto Abierto #1</h3><p class="text-gray-400 text-sm">Animación de un espacio de concepto abierto.</p></div>
+                    </div>
+                    <!-- Tarjeta de Video 3 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in relative" data-type="video" data-source="https://player.vimeo.com/video/1103925131">
+                        <img src="https://i.postimg.cc/8c422wYm/image.png" alt="Video de Remodelación Los Samanes" class="w-full h-48 object-cover">
+                        <div class="video-overlay"><i data-lucide="play-circle" class="w-16 h-16 text-white"></i></div>
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Remodelación Los Samanes</h3><p class="text-gray-400 text-sm">Recorrido de un proyecto de remodelación.</p></div>
+                    </div>
+                    <!-- Tarjeta de Video 4 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in relative" data-type="video" data-source="https://player.vimeo.com/video/1103919595">
+                        <img src="https://i.postimg.cc/5NNdBdH7/image.png" alt="Video de Living Room" class="w-full h-48 object-cover">
+                        <div class="video-overlay"><i data-lucide="play-circle" class="w-16 h-16 text-white"></i></div>
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Living Room</h3><p class="text-gray-400 text-sm">Animación de una sala de estar detallada.</p></div>
+                    </div>
+                    <!-- Tarjeta de Video 5 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in relative" data-type="video" data-source="https://player.vimeo.com/video/1135052941">
+                        <img src="https://i.postimg.cc/G3TgdCyS/Secuencia-01-00-00-00-00-Imagen-fija001.png" alt="Video de Proyecto Los Samanes" class="w-full h-48 object-cover">
+                        <div class="video-overlay"><i data-lucide="play-circle" class="w-16 h-16 text-white"></i></div>
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Proyecto Los Samanes</h3><p class="text-gray-400 text-sm">Recorrido completo del proyecto residencial.</p></div>
+                    </div>
+                    <!-- Tarjeta de Video 6 -->
+                    <div class="portfolio-card bg-gray-800 rounded-lg overflow-hidden fade-in relative" data-type="video" data-source="https://player.vimeo.com/video/1108510989">
+                        <img src="https://i.postimg.cc/qvSPHN1S/image.png" alt="Video de Casa Las Salinas" class="w-full h-48 object-cover">
+                        <div class="video-overlay"><i data-lucide="play-circle" class="w-16 h-16 text-white"></i></div>
+                        <div class="p-6"><h3 class="text-xl font-bold mb-2">Casa Las Salinas</h3><p class="text-gray-400 text-sm">Animación de un proyecto de casa de playa.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Sobre Mí -->
+            <section id="sobre-mi" class="py-20 lg:py-28 about-background rounded-lg">
+                <div class="max-w-4xl mx-auto text-center px-4 about-content">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight text-white text-shadow">Transformamos ideas en imágenes que parecen reales.</h2>
+                    <div class="space-y-6 text-gray-200 text-lg text-left sm:text-center text-shadow">
+                        <p>
+                            Especializados en renderizado 3D de alta calidad, logramos que cada proyecto cobre vida con un nivel de detalle, iluminación y texturas que transmiten exactamente la esencia del diseño.
+                        </p>
+                        <p>
+                            Nuestro equipo combina tecnología de vanguardia con creatividad y precisión técnica, ofreciendo visualizaciones impactantes que ayudan a presentar, vender o proyectar cualquier idea arquitectónica o de diseño interior.
+                        </p>
+                         <p>
+                            Cumplimos plazos, cuidamos cada detalle y acompañamos al cliente en todo el proceso para garantizar resultados que superen expectativas.
+                        </p>
+                         <p class="font-semibold text-white pt-4">
+                             En JG Estudio3D, no solo hacemos renders: creamos experiencias visuales que inspiran.
+                         </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Contacto -->
+            <section id="contacto" class="py-20 lg:py-28">
+                <div class="text-center max-w-4xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Contacto</h2>
+                    <p class="text-gray-400 mb-12">
+                        Estamos disponibles para proyectos y colaboraciones. Si tienes una idea en mente, no dudes en contactarnos a través de los siguientes canales.
+                    </p>
+                    <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 text-lg">
+                        <a href="https://www.instagram.com/jrgj2202/" target="_blank" rel="noopener noreferrer" class="flex items-center text-gray-300 hover:text-cyan-400 transition-colors">
+                            <i data-lucide="instagram" class="w-7 h-7 mr-2"></i>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://www.tiktok.com/@jrgj2202" target="_blank" rel="noopener noreferrer" class="flex items-center text-gray-300 hover:text-cyan-400 transition-colors">
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 fill-current"><title>TikTok</title><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.84-.95-6.43-2.88-1.59-1.93-2.2-4.35-1.7-6.73.25-1.19.7-2.33 1.39-3.36.69-1.02 1.6-1.89 2.63-2.59.32-.21.65-.4 1-.55.02 2.78.01 5.56.01 8.34 0 .67.04 1.34.09 2 0 .18-.01.35-.01.52-.02.17-.04.33-.05.5-.08.34-.19.67-.34.98-.17.35-.41.68-.7.95-.31.27-.67.49-1.05.63-.38.14-.78.22-1.19.23-1.03.02-2.06-.29-2.92-.87-.86-.58-1.51-1.38-1.89-2.35-.31-.79-.44-1.63-.44-2.48 0-3.33.01-6.66 0-9.99.02-1.52.57-3.01 1.68-4.13 1.11-1.11 2.7-1.63 4.23-1.78V.02Z"/></svg>
+                            <span>TikTok</span>
+                        </a>
+                        <a href="mailto:jrgj2202@gmail.com" class="flex items-center text-gray-300 hover:text-cyan-400 transition-colors">
+                            <i data-lucide="mail" class="w-7 h-7 mr-2"></i>
+                            <span>jrgj2202@gmail.com</span>
+                        </a>
+                        <a href="tel:+584245776818" class="flex items-center text-gray-300 hover:text-cyan-400 transition-colors">
+                           <i data-lucide="phone" class="w-7 h-7 mr-2"></i>
+                           <span>+58 424 5776818</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 border-t border-gray-800">
+            <p class="text-gray-500">&copy; <span id="year"></span> JG Estudios3D. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+    
+    <!-- Modal / Lightbox -->
+    <div id="modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 opacity-0 pointer-events-none">
+        <div id="modal-content" class="modal-content bg-gray-900 rounded-lg max-w-4xl max-h-full w-full transform scale-95 relative">
+            <div id="modal-body" class="p-2"></div>
+            <button id="modal-close" class="absolute -top-4 -right-4 bg-white text-gray-900 rounded-full w-10 h-10 flex items-center justify-center shadow-lg">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- INICIALIZACIÓN ---
+        lucide.createIcons();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- MENÚ MÓVIL ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- MODAL (LIGHTBOX) ---
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+        const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+        const openModal = (type, source) => {
+            modalBody.innerHTML = '';
+            if (type === 'image') {
+                const img = document.createElement('img');
+                img.src = source;
+                img.className = 'max-w-full max-h-[80vh] w-auto h-auto rounded-md mx-auto';
+                modalBody.appendChild(img);
+            } else if (type === 'video') {
+                const iframe = document.createElement('iframe');
+                iframe.src = source + "?autoplay=1&title=0&byline=0&portrait=0"; // Añadir autoplay y ocultar info
+                iframe.className = 'w-full h-auto rounded-md aspect-video';
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+                iframe.setAttribute('allowfullscreen', '');
+                modalBody.appendChild(iframe);
+            }
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+        };
+
+        const closeModal = () => {
+            modal.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+                modalBody.innerHTML = '';
+            }, 300);
+        };
+
+        portfolioCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const type = card.dataset.type;
+                const source = card.dataset.source;
+                if (type && source) openModal(type, source);
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
